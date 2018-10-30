@@ -21,34 +21,37 @@ public class Program {
             double prevClock = clock;
             if (timeList_AD[0] < timeList_AD[1]) {
                 clock = timeList_AD[0];
-                if (serverIsBusy) {
-                    b += clock - prevClock;
-                }
-                arrivalTime();
                 System.out.println("clock is " + clock);
+                if (checkEnd())
+                    break;
+                if (serverIsBusy)
+                    b += clock - prevClock;
+                arrivalTime();
                 oneEntered(prevClock);
             } else if (timeList_AD[0] > timeList_AD[1]) {
                 clock = timeList_AD[1];
-                if (serverIsBusy) {
-                    b += clock - prevClock;
-                }
-                serviceTime();
                 System.out.println("clock is " + clock);
+                if (checkEnd())
+                    break;
+                if (serverIsBusy)
+                    b += clock - prevClock;
+                serviceTime();
                 oneLeft(prevClock);
             } else {
                 clock = timeList_AD[0];
-                if (serverIsBusy) {
+                System.out.println("clock is " + clock);
+                if (checkEnd())
+                    break;
+                if (serverIsBusy)
                     b += clock - prevClock;
-                }
                 arrivalTime();
                 serviceTime();
-                System.out.println("clock is " + clock);
                 oneLeft(prevClock);
                 oneEntered(prevClock);
             }
             System.out.println("A: " + timeList_AD[0] + " | D: " + timeList_AD[1]);
             printQueue();
-            isEnd = checkEnd();
+            isEnd &= checkEnd();
         }
         System.out.println("Customers Serviced: " + customersServiced);
         System.out.println("Q(t) is: " + q);
@@ -88,7 +91,7 @@ public class Program {
     }
 
     private static boolean checkEnd() {
-        return queue.size() == 3;
+        return customersServiced == 5;
     }
 
     private static void oneEntered(double prevClock) {
@@ -109,9 +112,10 @@ public class Program {
             q += queue.size() * (clock - prevClock);
             double time = queue.remove();
             totalDelay += clock - time;
+            isEnd = true;
         } else {
             serverIsBusy = false;
-            while (timeList_AD[0] > timeList_AD[1]) {
+            while (timeList_AD[0] >= timeList_AD[1]) {
                 serviceTime();
             }
         }
