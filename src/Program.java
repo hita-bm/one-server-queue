@@ -21,16 +21,25 @@ public class Program {
             double prevClock = clock;
             if (timeList_AD[0] < timeList_AD[1]) {
                 clock = timeList_AD[0];
+                if (serverIsBusy) {
+                    b += clock - prevClock;
+                }
                 arrivalTime();
                 System.out.println("clock is " + clock);
                 oneEntered(prevClock);
             } else if (timeList_AD[0] > timeList_AD[1]) {
                 clock = timeList_AD[1];
+                if (serverIsBusy) {
+                    b += clock - prevClock;
+                }
                 serviceTime();
                 System.out.println("clock is " + clock);
                 oneLeft(prevClock);
             } else {
                 clock = timeList_AD[0];
+                if (serverIsBusy) {
+                    b += clock - prevClock;
+                }
                 arrivalTime();
                 serviceTime();
                 System.out.println("clock is " + clock);
@@ -39,9 +48,6 @@ public class Program {
             }
             System.out.println("A: " + timeList_AD[0] + " | D: " + timeList_AD[1]);
             printQueue();
-            if (serverIsBusy) {
-                b += clock - prevClock;
-            }
             isEnd = checkEnd();
         }
         System.out.println("Customers Serviced: " + customersServiced);
