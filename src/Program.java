@@ -53,6 +53,7 @@ public class Program {
             printQueue();
             isEnd &= checkEnd();
         }
+        System.out.println("__________________________________________");
         System.out.println("Customers Serviced: " + customersServiced);
         System.out.println("Q(t) is: " + q);
         System.out.println("B(t) is: " + b);
