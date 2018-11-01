@@ -11,9 +11,9 @@ public class Program {
     private static Queue<Double> queue;
     private static boolean serverIsBusy;
     private static int customersServiced;
-    private static double q;
+    private static double Qt;
     private static double totalDelay;
-    private static double b;
+    private static double Bt;
 
     public static void main(String args[]) {
         init();
@@ -25,7 +25,7 @@ public class Program {
                 if (checkEnd())
                     break;
                 if (serverIsBusy)
-                    b += clock - prevClock;
+                    Bt += clock - prevClock;
                 arrivalTime();
                 oneEntered(prevClock);
             } else if (timeList_AD[0] > timeList_AD[1]) {
@@ -34,7 +34,7 @@ public class Program {
                 if (checkEnd())
                     break;
                 if (serverIsBusy)
-                    b += clock - prevClock;
+                    Bt += clock - prevClock;
                 serviceTime();
                 oneLeft(prevClock);
             } else {
@@ -43,7 +43,7 @@ public class Program {
                 if (checkEnd())
                     break;
                 if (serverIsBusy)
-                    b += clock - prevClock;
+                    Bt += clock - prevClock;
                 arrivalTime();
                 serviceTime();
                 oneLeft(prevClock);
@@ -55,9 +55,17 @@ public class Program {
         }
         System.out.println("__________________________________________");
         System.out.println("Customers Serviced: " + customersServiced);
-        System.out.println("Q(t) is: " + q);
-        System.out.println("B(t) is: " + b);
+        System.out.println("Q(t) is: " + Qt);
+        System.out.println("B(t) is: " + Bt);
         System.out.println("Total delay in this system was: " + totalDelay);
+        double Wq = totalDelay / customersServiced;
+        double Lq = Qt / clock;
+        double p = Bt / clock;
+        double L = Lq + p;
+        System.out.println("Wq is: " + Wq + " min/customers");
+        System.out.println("Lq is: " + Lq + " customers");
+        System.out.println("p is: " + p);
+        System.out.println("L is: " + L + " customers");
     }
 
     private static void init() {
@@ -67,8 +75,8 @@ public class Program {
         serviceTime();
         timeList_AD[1] += timeList_AD[0];
         clock = 0;
-        q = 0;
-        b = 0;
+        Qt = 0;
+        Bt = 0;
         totalDelay = 0;
         queue = new LinkedList<>();
         isEnd = false;
@@ -97,7 +105,7 @@ public class Program {
 
     private static void oneEntered(double prevClock) {
         if (queue.size() > 0) {
-            q += queue.size() * (clock - prevClock);
+            Qt += queue.size() * (clock - prevClock);
         }
         queue.add(clock);
         if (!serverIsBusy) {
@@ -110,7 +118,7 @@ public class Program {
     private static void oneLeft(double prevClock) {
         customersServiced++;
         if (queue.size() > 0) {
-            q += queue.size() * (clock - prevClock);
+            Qt += queue.size() * (clock - prevClock);
             double time = queue.remove();
             totalDelay += clock - time;
             isEnd = true;
